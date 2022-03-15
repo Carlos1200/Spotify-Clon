@@ -1,9 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { Layout } from '../components/Layout'
+import { useSession } from 'next-auth/react'
 
 const Home: NextPage = () => {
+  const { data: session } = useSession()
+  console.log(session)
+
   return (
-    <div>
+    <Layout>
       <Head>
         <title>Spotify</title>
         <meta name="description" content="Spotify clon" />
@@ -13,7 +18,7 @@ const Home: NextPage = () => {
         <aside className="bg-secondary-black col-span-2"></aside>
         <main className=" bg-primary-black col-span-7"></main>
       </div>
-    </div>
+    </Layout>
   )
 }
 

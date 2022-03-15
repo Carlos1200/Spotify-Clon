@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String               @id @default(cuid())
+  name       String
+  email      String               @unique
+  PlayLists  Playlist[]
+  Albums     Album_LikedOnUser[]
+  Artists    Artist_LikedOnUser[]
+  Songs      Song_LikedOnUser[]
+  createdAt  DateTime             @default(now())
+}
+
+model Artist {
+  id         String               @id @default(cuid())
+  name       String
+  email      String               @unique
+  Albums     Album[]
+  Users      Artist_LikedOnUser[]
+  createdAt  DateTime             @default(now())
+}
+
+model Artist_LikedOnUser {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  artistId  String
+  artist    Artist   @relation(fields: [artistId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Album {
+  id        String              @id @default(cuid())
+  name      String
+  image     String
+  artistId  String
+  artist    Artist              @relation(fields: [artistId], references: [id])
+  Songs     Song[]
+  Users     Album_LikedOnUser[]
+  createdAt DateTime            @default(now())
+}
+
+model Album_LikedOnUser {
+  albumId   String
+  album     Album    @relation(fields: [albumId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@id([albumId, userId])
+}
+
+model Song {
+  id         String             @id @default(cuid())
+  title      String
+  duration   Float
+  url        String
+  reproduced Int
+  genderId   String
+  explicit   Boolean
+  PlayLists  PlaylistOnSong[]
+  Users      Song_LikedOnUser[]
+  gender     Gender             @relation(fields: [genderId], references: [id])
+  albumId    String
+  album      Album              @relation(fields: [albumId], references: [id])
+  createdAt  DateTime           @default(now())
+}
+
+model Song_LikedOnUser {
+  songId    String
+  song      Song     @relation(fields: [songId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@id([songId, userId])
+}
+
+model Gender {
+  id    String @id @default(cuid())
+  name  String @unique
+  Songs Song[]
+}
+
+model Playlist {
+  id          String           @id @default(cuid())
+  name        String
+  Songs       PlaylistOnSong[]
+  image       String
+  description String
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+}
+
+model PlaylistOnSong {
+  songId     String
+  song       Song     @relation(fields: [songId], references: [id])
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  addedAt    DateTime @default(now())
+
+  @@id([songId, playlistId])
+}
