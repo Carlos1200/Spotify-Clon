@@ -1,14 +1,15 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Layout } from '../components/Layout'
+import { TopBar } from '../components/TopBar'
 const Home: NextPage = () => {
   return (
-    <Layout>
+    <Layout title="Spotify">
       <Head>
-        <title>Spotify</title>
         <meta name="description" content="Spotify clon" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <TopBar />
     </Layout>
   )
 }

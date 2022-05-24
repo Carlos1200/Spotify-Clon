@@ -16,8 +16,8 @@ export const NavButtons = ({ path, icon, name }: Props) => {
       <Link href={path} passHref>
         <div
           className={`${
-            router.pathname == path ? 'text-white' : 'text-gray-300'
-          } font-bold flex items-center cursor-pointer`}
+            router.pathname == path ? 'text-white' : 'text-gray-400'
+          } font-bold flex items-center cursor-pointer hover:text-white transition-colors duration-200`}
         >
           <FontAwesomeIcon icon={icon} className="mr-4" />
           <p>{name}</p>
